@@ -26,10 +26,7 @@ contract ConstantSumAMM {
 
         (IERC20 tokenIn, IERC20 tokenOut, uint256 reserveIn, uint256 reserveOut) = 
         isToken0 ? (token0, token1, reserve0, reserve1) : (token1, token0, reserve1, reserve0); 
-        // _amountIn = 500, reserveIn = 1000, reserveOut = 1500 
-        // so -> 500 + 1000 = 1500 
-        // -> 1500 - 1000 = 500  
-        // -> (500 * 997) / 1000 = 498.5  
+
         tokenIn.transferFrom(msg.sender, address(this), _amountIn); 
         uint256 amountIn = tokenIn.balanceOf(address(this)) - reserveIn;
 
@@ -63,9 +60,6 @@ contract ConstantSumAMM {
         _updateReserves(balance0, balance1);
     }
 
-    // Constant Sum AMM formula: 
-    // x + y = k 
-    // x = reserve0, y = reserve1, k = constant 
 
     // Internal and Private functions: 
 
