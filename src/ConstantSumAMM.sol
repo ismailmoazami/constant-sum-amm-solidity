@@ -60,6 +60,25 @@ contract ConstantSumAMM {
         _updateReserves(balance0, balance1);
     }
 
+        function removeLiquidity(uint256 _shares)
+        external
+        returns (uint256 delta0, uint256 delta1)
+    {
+
+        delta0 = (reserve0 * _shares) / totalSupply;
+        delta1 = (reserve1 * _shares) / totalSupply;
+
+        _burn(msg.sender, _shares);
+        _updateReserves(reserve0 - delta0, reserve1 - delta1);
+
+        if (delta0 > 0) {
+            token0.transfer(msg.sender, delta0);
+        }
+        if (delta1 > 0) {
+            token1.transfer(msg.sender, delta1);
+        }
+    }
+
 
     // Internal and Private functions: 
 
@@ -71,5 +90,10 @@ contract ConstantSumAMM {
     function _mint(address _to, uint256 _shares) internal {
         balanceOf[_to] += _shares;  
         totalSupply += _shares;
+    }
+
+    function _burn(address _from, uint256 _shares) internal {
+        balanceOf[_from] -= _shares; 
+        totalSupply -= _shares; 
     }
 }
